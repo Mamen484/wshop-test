@@ -1,3 +1,5 @@
+# Test 2 - Debug
+
 - Le endpoint est situé dans le dossier public
 - Plusieurs namespaces :
     FwTest\Core : le noyau du framework, lié au dossier "app"
@@ -5,16 +7,20 @@
     FwTest\Classes : les classes, liées au dossier "classes". Le namespace est au pluriel car "Class" est un mot clé réservé dans le moteur
     FwTest\Model : les modèles, liés au dossier "models
 - Routes : géré de la même façon que Symfony. Dans un docblock de contrôleur. Par exemple :
+
+    ```php
     /**
     * @Route('/index.php')
     */
-- Vues/Templates : 
+    ```
+
+- Vues/Templates :
     dans le dossier "templates"
     le nom doit se finir par ".tpl.php". Par exemple : "fichier.tpl.php"
     dans un contrôleur = $this->render('chemin/vers/fichier.tpl'); (on ne met pas .php)
         En deuxième paramètre, on met éventuellement un tableau de variables
             Exemple : $this->render('chemin/vers/fichier.tpl', ['variable' => 'Joe Black']);
-            Pour les utiliser dans le template, on fait comme dans nos vues actuelles = <?php echo $this->variable; ?>
+            Pour les utiliser dans le template, on fait comme dans nos vues actuelles = ```php <?php echo $this->variable; ?>```
 - BDD :
     Fichier de config "config/database.ini"
         C'est un fichier au format ini
@@ -24,7 +30,5 @@
         fetchOne()
         fetchRow()
         fetchAll()
-        
         En premier argument : la requête
         En deuxième argument optionnel : tableau de données pour la requête préparée
-    

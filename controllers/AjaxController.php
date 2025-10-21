@@ -1,11 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace FwTest\Controller;
-use FwTest\Classes as Classes;
+
+use FwTest\Classes\ProductDAO;
 
 class AjaxController extends AbstractController
 {
     /**
-     * @Route('/ajax_delete_product.php')
+     * @Route('/ajax_delete_product')
      */
     public function deleteProduct()
     {
@@ -16,8 +20,8 @@ class AjaxController extends AbstractController
         $return['success'] = false;
 
         if ($id > 0) {
-            $product = new Classes\Product($db, $id);
-            $deleted = $product->delete();
+            $product = new ProductDAO($db, $id);
+            $deleted = $product->delete($id);
             $return['success'] = $deleted;
         }
 

@@ -1,69 +1,49 @@
 <?php
-$product = $this->product;
+/** @var FwTest\DTO\ProductDTO $product */
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <title>FW TEST - Détail du produit</title>
 
-  <title>FW TEST - PRODUCT DETAIL</title>
-  
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
-
-  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <link href="css/main.css" rel="stylesheet">
-
 </head>
 
 <body>
 
-  <!-- Page Content -->
-  <div class="container">
+  <div class="container my-5">
+    <a href="/product_list" class="btn btn-link mb-3">&larr; Retour à la liste</a>
 
-      <!-- Jumbotron Header -->
-      <header class="jumbotron my-4">
-        <h1 class="display-3">PRODUCT DETAIL</h1>
-      </header>
+    <div class="card shadow-sm">
+      <img class="card-img-top" src="https://placehold.co/900x400" alt="<?= htmlspecialchars($product->getName()) ?>">
 
-      <div class="row text-center">
+      <div class="card-body">
+        <h2 class="card-title mb-3"><?= htmlspecialchars($product->getTitle() ?? $product->getName()) ?></h2>
 
-        <div class="card mt-4">
-          <img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
-          <div class="card-body">
-            <h3 class="card-title"><?php echo $product->produit_titreobjet; ?></h3>
-            <h4>
-              <?php
-              if ($product->produit_prixremise>0 && $product->produit_prixremise<$product->produit_vente) {
-              ?>
-                <span><?php echo $product->produit_prixremise ?> &euro;</span>
-                <span><strike><?php echo $product->produit_prixvente ?> &euro;</strike></span>
-              <?php
-              } else {
-              ?>
-                <span><?php echo $product->produit_prixvente ?> &euro;</span>
-              <?php
-              }
-              ?>
-             </h4>
-            <p class="card-text"><?php echo $product->produit_description; ?></p>
-          </div>
-        </div>
-        <!-- /.card -->
+        <h4 class="mb-4">
+          <?php if ($product->getDiscountPrice() > 0 && $product->getDiscountPrice() < $product->getPrice()): ?>
+            <span class="text-success"><?= number_format($product->getDiscountPrice(), 2, ',', ' ') ?> €</span>
+            <span class="text-muted"><del><?= number_format($product->getPrice(), 2, ',', ' ') ?> €</del></span>
+          <?php else: ?>
+            <span><?= number_format($product->getPrice(), 2, ',', ' ') ?> €</span>
+          <?php endif; ?>
+        </h4>
 
+        <p class="card-text"><?= nl2br(htmlspecialchars($product->getDescription())) ?></p>
       </div>
-      <!-- /.col-lg-9 -->
 
+      <div class="card-footer bg-light text-right">
+        <small class="text-muted">Dernière mise à jour :
+          <?= $product->getUpdatedAt() ? $product->getUpdatedAt()->format('d/m/Y H:i') : 'N/A' ?>
+        </small>
+      </div>
+    </div>
   </div>
-  <!-- /.container -->
 
 </body>
-
 </html>

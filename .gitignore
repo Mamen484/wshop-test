@@ -1,0 +1,11 @@
+.php-version
+
+/.idea/
+.vscode/
+.DS_Store
+/.devcontainer/
+/.github/
+
+/.env.local
+/vendor/
+composer.lock

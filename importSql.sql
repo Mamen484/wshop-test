@@ -1,42 +1,35 @@
 /*
 SQLyog Ultimate v13.1.1 (64 bit)
-MySQL - 8.0.17 : Database - _wshop_test
+MySQL - 8.0.17 : Database - wshop_test
 *********************************************************************
 */
 
-/*!40101 SET NAMES utf8 */;
+CREATE DATABASE IF NOT EXISTS `wshop_test` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `wshop_test`;
 
-/*!40101 SET SQL_MODE=''*/;
+/*Table structure for table `product` */
 
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`_wshop_test` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+DROP TABLE IF EXISTS `product`;
 
-USE `_wshop_test`;
+CREATE TABLE `product` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `reference` VARCHAR(30) NOT NULL DEFAULT '',
+  `name` VARCHAR(100) NOT NULL,
+  `title` VARCHAR(100) DEFAULT NULL,
+  `price` FLOAT UNSIGNED NOT NULL,
+  `discount_price` FLOAT UNSIGNED NOT NULL,
+  `description` TEXT NOT NULL,
+  `updated_at` DATETIME DEFAULT NULL COMMENT 'triggered on ADD/MODIF',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`reference`),
+  KEY (`updated_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-/*Table structure for table `produit` */
+/*Data for the table `product` */
 
-DROP TABLE IF EXISTS `produit`;
-
-CREATE TABLE `produit` (
-  `produit_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `produit_ref` varchar(30) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `produit_nom` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `produit_titreobjet` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `produit_prixvente` float unsigned NOT NULL,
-  `produit_prixremise` float unsigned NOT NULL,
-  `produit_description` text CHARACTER SET utf8 NOT NULL,
-  `tr_date_updated` datetime DEFAULT NULL COMMENT 'via trigger ADD/MODIF',
-  PRIMARY KEY (`produit_id`),
-  UNIQUE KEY `produit_ref` (`produit_ref`),
-  KEY `tr_date_updated` (`tr_date_updated`)
-) ENGINE=InnoDB AUTO_INCREMENT=607 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `produit` */
-
-insert  into `produit`(`produit_id`,`produit_ref`,`produit_nom`,`produit_titreobjet`,`produit_prixvente`,`produit_prixremise`,`produit_description`,`tr_date_updated`) values 
+INSERT INTO `product`
+(`id`, `reference`, `name`, `title`, `price`, `discount_price`, `description`, `updated_at`)
+values 
 (1,'00W003711','Talc Antiseptique Tradicional','Talc Antiseptique Tradicional',8,0,'&sect;Description&sect;Avec sa formule efficace depuis 1903, le Talc antiseptique Tradicional allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes.<br />\r\nIl combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie.&nbsp;&sect;Conseils d&#39;utilisation&sect;Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches.&sect;Composition&sect;talc, starch, sulfur, zinc oxide, boric acid, alicylic acid',NULL),
 (2,'00W003712','Talc Antiseptique Fresh','Talc Antiseptique Fresh',8,0,'&sect;Description&sect; Avec sa formule efficace depuis 1903, le Talc antiseptique Fresh allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes. Il combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie. &sect;Conseils d&#39;utilisation&sect; Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches. &sect;Composition&sect; talc, starch, sulfur, zinc oxide, boric acid, parfum, salicylic acid.',NULL),
 (3,'00W003713','Talc Antiseptique Sport','Talc Antiseptique Sport',8,0,'&sect;Description&sect; Avec sa formule efficace depuis 1903, le Talc antiseptique Sport allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes. Il combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie. &sect;Conseils d&#39;utilisation&sect; Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches. &sect;Composition&sect; talc, starch, sulfur, zinc oxide, boric acid, parfum, salicylic acid.',NULL),
@@ -55,23 +48,25 @@ insert  into `produit`(`produit_id`,`produit_ref`,`produit_nom`,`produit_titreob
 
 /*Table structure for table `produit_lang` */
 
-DROP TABLE IF EXISTS `produit_lang`;
+DROP TABLE IF EXISTS `product_lang`;
 
-CREATE TABLE `produit_lang` (
-  `produit_lang_id` int(11) NOT NULL AUTO_INCREMENT,
-  `produit_lang_nom` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `produit_lang_titreobjet` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
-  `produit_lang_description` text CHARACTER SET utf8,
-  `fk_produit_id` int(11) DEFAULT NULL,
-  `fk_lang_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`produit_lang_id`),
-  KEY `fk_produit_id` (`fk_produit_id`),
-  KEY `fk_lang_id` (`fk_lang_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `product_lang` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) DEFAULT NULL,
+  `title` VARCHAR(100) DEFAULT NULL,
+  `description` TEXT,
+  `product_id` INT(11) DEFAULT NULL,
+  `lang_id` INT(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY (`product_id`),
+  KEY (`lang_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `produit_lang` */
 
-insert  into `produit_lang`(`produit_lang_id`,`produit_lang_nom`,`produit_lang_titreobjet`,`produit_lang_description`,`fk_produit_id`,`fk_lang_id`) values 
+INSERT INTO `product_lang`
+(`id`, `name`, `title`, `description`, `product_id`, `lang_id`)
+values 
 (1,'Talc Antiseptique Tradicional','Talc Antiseptique Tradicional','&sect;Description&sect;Avec sa formule efficace depuis 1903, le Talc antiseptique Tradicional allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes.<br />\r\nIl combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie.&nbsp;&sect;Conseils d&#39;utilisation&sect;Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches.&sect;Composition&sect;talc, starch, sulfur, zinc oxide, boric acid, alicylic acid',1,1),
 (2,'Talc Antiseptique Fresh','Talc Antiseptique Fresh','&sect;Description&sect; Avec sa formule efficace depuis 1903, le Talc antiseptique Fresh allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes. Il combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie. &sect;Conseils d&#39;utilisation&sect; Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches. &sect;Composition&sect; talc, starch, sulfur, zinc oxide, boric acid, parfum, salicylic acid.',2,1),
 (3,'Talc Antiseptique Sport','Talc Antiseptique Sport','&sect;Description&sect; Avec sa formule efficace depuis 1903, le Talc antiseptique Sport allie des actions antiseptiques, antibact&eacute;riennes, fongicides, cicatrisantes et d&eacute;odorantes. Il combat les odeurs de transpiration des aisselles et des pieds, mais aussi l&acute;&eacute;ryth&egrave;me fessier et la miliaria. Il pr&eacute;vient les &eacute;ruptions cutan&eacute;es et les engelures. Cliniquement test&eacute;. Emballage &eacute;conomique. Ne contient pas de chlorhydroxyde d&#39;aluminium minimisant le risque d&acute;allergie. &sect;Conseils d&#39;utilisation&sect; Appliquer sur les zones d&eacute;sir&eacute;es, propres et s&egrave;ches. &sect;Composition&sect; talc, starch, sulfur, zinc oxide, boric acid, parfum, salicylic acid.',3,1),
@@ -92,8 +87,3 @@ insert  into `produit_lang`(`produit_lang_id`,`produit_lang_nom`,`produit_lang_t
 (18,'Gel Hydratant Matifiant Visage','Gel Hydratant Matifiant Visage','&sect;Description&sect; Le Gel Hydratant Matifiant est sp&eacute;cifiquement adapt&eacute; pour les peaux grasses et/ou en accompagnements des soins anti-acn&eacute;. Sa formule enrichie en Zinc matifie la peau instantan&eacute;ment et r&eacute;duit la taille des pores. Texture l&eacute;g&egrave;re et non grasse qui p&eacute;n&egrave;tre rapidement la peau. Sensation s&egrave;che et finition matifiante. Formule sans fragrance, sans colorant et sans parab&egrave;ne. Test&eacute; cliniquement. Non com&eacute;dog&egrave;ne. &sect;Conseils d&#39;utilisation&sect; Appliquer matin et soir sur peau propre et s&egrave;che. &sect;Composition&sect; AQUA (WATER), DIMETHICONE, GLYCERIN, HYDROXYETHYL UREA, BUTYLENE GLYCOL, ALUMINUM STARCH OCTENYLSUCCINATE, SODIUM POLYACRYLATE, DIMETHICONE CROSSPOLYMER, FOMES OFFICINALIS EXTRACT, SORBITAN CAPRYLATE, CYCLOPENTASILOXANE, TRIDECETH-6, PEG/ PPG &ndash; 18/18 DIMETHICONE, PROPANEDIOL, AMINOMETHYL PROPANOL, BENZOIC ACID, ARCTIUM MAJUS ROOT EXTRACT, PHENOXYETHANOL, ZINC SULFATE, PEG-40 HYDROGENATED CASTOR OIL, BIOTIN.',22,1),
 (19,'Fluide Hydratant Visage','Fluide Hydratant Visage','&sect;Description&sect; Le Fluide Hydratant Visage est indiqu&eacute; pour tout type de peau, m&ecirc;me les plus sensibles. Enrichi en Vitamine E, il a une action antioxydante. La pr&eacute;sence d&acute;Angico Branco lui offre une l&eacute;g&egrave;re action matifiante et le beurre de Murumuru promet une hydratatation prolong&eacute;e. Test&eacute; cliniquement. Non com&eacute;dog&egrave;ne. &sect;Conseils d&#39;utilisation&sect; Appliquer matin et soir sur peau propre et s&egrave;che. &sect;Composition&sect; AQUA (WATER), CYCLOPENTASILOXANE, ISONONYL ISONONANOATE, GLYCERIN, CETEARYL ALCOHOL, DIMETHICONE, ASTROCARYUM MURUMURU SEED BUTTER, CAPRYLIC/CAPRIC TRIGLYCERIDE, POLYSORBATE 60, TOCOPHERYL ACETATE, POLYACRYLAMIDE, SORBITAN CAPRYLATE, C13&ndash;14 ISOPARAFFIN, DIMETHICONE CROSSPOLYMER, BUTYLENE GLYCOL, PALM ALCOHOL, PROPANEDIOL, BENZOIC ACID, LAURETH 7, PIPTADENIA COLUBRINA PEEL EXTRACT, AMINOMETHYL PROPANOL, DISODIUM EDTA, THEOBROMA GRANDIFLORUM SEED BUTTER, LECITHIN, BHT, PHYTOSTERYL CANOLATE, PHENOXYETHANOL, CAPRYLYL GLYCOL, POTASSIUM SORBATE, TOCOPHEROL.',23,1),
 (20,'Traditional antiseptic talc','Traditional antiseptic talc','§Description§Traditional antiseptic talc uses a formula first created in 1903, providing an array of antiseptic, antibacterial, fungicidal, healing and deodorant properties.\nIt effectively combats odours from underarms and feet and soothes the effects of chafing and prickly heat. Also prevents rashes and chilblains. Clinically tested. Economical packaging. Does not contain aluminium chlorhydroxide, reducing the risk of allergic reactions. \nFragrance : Fresh & Citric§Tips for Use§Apply to clean, dry skin.§Composition§talc, starch, sulfur, zinc oxide, boric acid, alicylic acid.',1,2);
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

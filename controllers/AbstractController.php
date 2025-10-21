@@ -1,82 +1,90 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FwTest\Controller;
+
+use FwTest\Core\Database;
+use FwTest\Core\Session;
 
 class AbstractController
 {
-    private $db;
-
-    public $array_constant;
+    private ?Database $db = null;
+    public array $array_constant;
 
     public function __construct()
     {
         $this->array_constant = $this->getConstant();
     }
 
-    public function getDatabaseConnection()
+    /**
+     * Retourne la connexion à la base de données
+     */
+    public function getDatabaseConnection(): Database
     {
         if (!$this->db) {
-            $this->db = new \FwTest\Core\Database();
+            $this->db = new Database();
         }
-
         return $this->db;
     }
 
-    public function render($filePath, $arrayArgs)
+    /**
+     * Renders a template file with optional variables
+     */
+    public function render(string $filePath, array $arrayArgs = []): string
     {
-        $templatePath = '../templates/';
-        $fullPath = $templatePath . $filePath . '.php';
-
-        if (!file_exists($fullPath)) {
-            throw new \Exception('Template doesn\'t exist');
+        $templateDir = realpath(__DIR__ . '/../templates');
+        if (!$templateDir) {
+            throw new \RuntimeException('Templates directory not found');
         }
-        $object = new class() {
-            public function render($path)
-            {
-                ob_start();
-                require_once($path);
-                $file_content = ob_get_clean();
 
-                return $file_content;
+        $fullPath = $templateDir . '/' . $filePath . '.php';
+        if (!file_exists($fullPath)) {
+            throw new \RuntimeException("Template file not found: $fullPath");
+        }
+
+        $renderer = new class {
+            public function render(string $path, array $vars): string
+            {
+                extract($vars, EXTR_OVERWRITE);
+                ob_start();
+                require $path;
+                return ob_get_clean();
             }
         };
 
-        if (!empty($arrayArgs)) {
-            foreach ($arrayArgs as $key => $value) {
-                $object->$key = $value;
-            }
-        }
-
-        return $object->render($fullPath);
-    }
-
-    public function getConstant()
-    {
-        $path = 'config/constant.ini';
-        
-        $arrayConstant = parse_ini_file($path, true);
-
-        return $arrayConstant;
+        return $renderer->render($fullPath, $arrayArgs);
     }
 
     /**
-     * Redirects to the given URL
-     *
-     * @param String $url The URL we want to be redirected
+     * Charge le fichier de constantes
      */
-    public function _redirect($url, $code = null)
+    public function getConstant(): array
     {
-        $session = get_session();
+        $configFile = realpath(__DIR__ . '/../config/constant.ini');
+        if (!$configFile || !file_exists($configFile)) {
+            throw new \RuntimeException("Configuration file not found: $configFile");
+        }
+
+        return parse_ini_file($configFile, true);
+    }
+
+    /**
+     * Redirection HTTP
+     */
+    public function _redirect(string $url, ?string $code = null): void
+    {
+        // Utilisation de la classe Session au lieu de get_session()
+        $session = new Session();
         $session->save();
 
-        if ($code == '301') {
+        if ($code === '301') {
             header('HTTP/1.1 301 Moved Permanently');
-        } elseif ($code == '307') {
+        } elseif ($code === '307') {
             header('HTTP/1.1 307 Moved Temporarily');
         }
 
-        // The original header redirection doesn't stop the page execution until the wanted link is found. that's why we "exit" right after the header.
-        header('Location: ' . $url);
+        header("Location: $url");
         exit;
     }
 }
